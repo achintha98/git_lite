@@ -1,9 +1,4 @@
-public class Main {
+hello jgfhaiaejjnak the wulken is not found it is not a soldier. it is said to be tracking unnecery statments. I dont really know what the fuck am i typeing .
+just some random stuff about everything. and nothing is never found between you and me.fuck yah.......
 
-    /** Usage: java gitlet.Main ARGS, where ARGS contains
-     *  <COMMAND> <OPERAND1> <OPERAND2> ...
-     */
-    public static void main(String[] args) {
-        System.out.println("Hello World")
-    }
-}
+ttt .
