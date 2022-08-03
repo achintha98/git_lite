@@ -1,7 +1,5 @@
 package gitlet;
 
-import java.util.List;
-
 public class BranchService {
     private final BranchRepository repository;
 
@@ -18,18 +16,15 @@ public class BranchService {
     }
 
     public void checkoutBranch(String branchName) {
+        if (repository.activeBranchName().equals(branchName)) {
+            System.out.println("You are already on the same branch");
+            System.exit(0);
+        }
         if (repository.branchDirExists(branchName)) {
             repository.checkoutBranch(branchName);
             return;
         }
         System.out.println("The branch does not exists");
         System.exit(0);
-    }
-    public String activeBranchName() {
-        return repository.activeBranchName();
-    }
-
-    public List<String> getBranchesList() {
-        return repository.branchesList();
     }
 }

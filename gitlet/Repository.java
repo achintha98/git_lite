@@ -1,6 +1,7 @@
 package gitlet;
 
 import java.io.File;
+import java.util.List;
 
 import static gitlet.Utils.*;
 
@@ -11,6 +12,7 @@ import static gitlet.Utils.*;
  *  @author Achintha Kalunayaka
  */
 public class Repository {
+
     /**
      * TODO: add instance variables here.
      *
@@ -44,13 +46,21 @@ public class Repository {
     }
 
     public boolean removeFile(String fileName) {
-        return Utils.restrictedDelete(fileName);
+        if (Utils.join( fileName).exists()) {
+            return Utils.restrictedDelete(fileName);
+        }
+        return false;
     }
 
     public void writeToFileAsString(File file, String contents) {
         Utils.writeContents(file, contents);
     }
-    public boolean fileExists(String directory, String fileName) {
+
+    public List<String> filesInCWD() {
+        return Utils.plainFilenamesIn(CWD);
+    }
+
+    public boolean fileExists(File directory, String fileName) {
         File file = Utils.join(directory, fileName);
         return file.exists();
     }

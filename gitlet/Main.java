@@ -17,19 +17,16 @@ public class Main {
         }
 
         BranchRepository branchRepository = new BranchRepository();
-        BlobRepository blobRepository = new BlobRepository();
         IndexRepository indexRepository = new IndexRepository();
         CommitRepository commitRepository = new CommitRepository();
 
-
         BranchService branchService = new BranchService(branchRepository);
-        IndexFileService indexFileService = new IndexFileService(indexRepository, commitRepository);
+        IndexFileService indexFileService = new IndexFileService(indexRepository, commitRepository, branchRepository);
         CommitFileService commitFileService = new CommitFileService(commitRepository, indexRepository, branchRepository);
-        BlobFileService blobFileService = new BlobFileService(blobRepository);
         DisplayPrinter displayPrinter = new DisplayPrinter(commitRepository, branchRepository, indexRepository);
 
-        Command command = new Command.Builder().argumentsBuilder(args).commitFileServiceBuilder(commitFileService).
-                blobFileServiceBuilder(blobFileService).branchServiceBuilder(branchService).
+        Command command = new Command.Builder().argumentsBuilder(args).commitFileServiceBuilder(commitFileService)
+                .branchServiceBuilder(branchService).
                 indexFileServiceBuilder(indexFileService).displayPrinterBuilder(displayPrinter).build();
         command.run();
     }

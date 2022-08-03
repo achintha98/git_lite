@@ -6,16 +6,13 @@ public class Command {
     private final CommitFileService commitFileService;
     private final BranchService branchService;
     private final IndexFileService indexFileService;
-    private final BlobFileService blobFileService;
     private final DisplayPrinter printer;
-
 
     private Command(Builder builder) {
         this.arguments = builder.arguments;
         this.commitFileService = builder.commitFileService;
         this.branchService = builder.branchService;
         this.indexFileService = builder.indexFileService;
-        this.blobFileService = builder.blobFileService;
         this.printer = builder.printer;
     }
 
@@ -24,7 +21,6 @@ public class Command {
         private  CommitFileService commitFileService;
         private  BranchService branchService;
         private  IndexFileService indexFileService;
-        private  BlobFileService blobFileService;
         private DisplayPrinter printer;
 
         public Builder argumentsBuilder(String[] arguments) {
@@ -43,10 +39,6 @@ public class Command {
             this.indexFileService = indexFileService;
             return this;
         }
-        public Builder blobFileServiceBuilder(BlobFileService blobFileService) {
-            this.blobFileService = blobFileService;
-            return this;
-        }
         public Builder displayPrinterBuilder(DisplayPrinter printer) {
             this.printer =  printer;
             return this;
@@ -59,20 +51,46 @@ public class Command {
     public void run() {
         String firstArg = arguments[0];
         switch (firstArg) {
-            case "init" -> init();
-            case "add" -> add(arguments[1]);
-            case "commit" -> commit(arguments[1]);
-            case "rm" -> remove(arguments[1]);
-            case "log" -> log();
-            case "global-log" -> globalLog();
-            case "find" -> find(arguments[1]);
-            case "status" -> status();
-            case "branch" -> branch(arguments[1]);
-            case "checkout" -> {
-                checkout(arguments[1]);
-                checkout(arguments[1], arguments[2]);
-                checkout(arguments[1], arguments[2], arguments[3]);
-            }
+            case "init":
+                init();
+                break;
+            case "add":
+                add(arguments[1]);
+                break;
+            case "commit":
+                commit(arguments[1]);
+                break;
+            case "rm":
+                remove(arguments[1]);
+                break;
+            case "log":
+                log();
+                break;
+            case "global-log":
+                globalLog();
+                break;
+            case "find":
+                find(arguments[1]);
+                break;
+            case "status":
+                status();
+                break;
+            case "branch":
+                branch(arguments[1]);
+                break;
+            case "checkout":
+                if (arguments.length == 2) {
+                    checkout(arguments[1]);
+                    break;
+                }
+                if (arguments.length == 3) {
+                    checkout(arguments[1], arguments[2]);
+                    break;
+                }
+                if (arguments.length == 4) {
+                    checkout(arguments[1], arguments[2], arguments[3]);
+                    break;
+                }
         }
     }
 
@@ -89,23 +107,23 @@ public class Command {
     }
 
     public void remove(String fileName) {
-        indexFileService.remove(fileName);
+        indexFileService.removeStagedFile(fileName);
     }
 
     public void log() {
-        printer.log();
+        commitFileService.log();
     }
 
     public void globalLog() {
-        printer.globalLog();
+        commitFileService.globalLog();
     }
 
     public void find(String msg) {
-        commitFileService.find(msg);
+        commitFileService.findByCommitMessage(msg);
     }
 
     public  void status() {
-        printer.status();
+        indexFileService.status();
     }
 
     public void checkout(String branchName) {
@@ -118,7 +136,7 @@ public class Command {
             System.out.println("Invalid command");
             System.exit(0);
         }
-        indexFileService.checkoutStagedFile(fileName);
+        indexFileService.checkoutHeadFile(fileName);
     }
 
     public void checkout(String dash, String commitId, String fileName) {

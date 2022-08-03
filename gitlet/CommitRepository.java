@@ -58,10 +58,6 @@ public class CommitRepository extends Repository {
         return commitFilesList;
     }
 
-    public boolean isFileInHead(String fileName) {
-        return getHeadCommit().getBlobsMap().get(fileName) != null;
-    }
-
     public void writeNewHeadHash(String hashCode) {
         String headPath = Utils.readContentsAsString(HEAD_PATH_FILE);
         File headFile = Utils.join(headPath);
